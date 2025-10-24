@@ -65,7 +65,7 @@ Licensed under the **AGPL-3.0** License.
 ---
 ## 🌍 Links
 
-- 📦 **GitHub Repository:** *(TODO)*
+- 📦 **[GitHub Repository](https://github.com/milomach/jmcore)**
 - 💬 **Discord:** *(TODO)*
 - 🧭 **Documentation:** *(TODO)*
 ---
