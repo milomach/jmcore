@@ -18,8 +18,8 @@ python3 extract-aj-data.py
 
 ```
 
-4. The script will generate an `aj-data` folder inside the data pack’s root directory.
-5. Move the generated `aj-data` folder into JMCore’s `resources` directory for use by the plugin.
+4. The script will generate an `aj_data` folder inside the data pack’s root directory.
+5. Move the generated `aj_data` folder into JMCore’s `resources` directory for use by the plugin.
 ### 📝 Notes
 
 * Designed specifically for JMCore’s model and animation system.
