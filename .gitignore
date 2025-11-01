@@ -1,0 +1,52 @@
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Gradle
+.gradle/
+build/
+!gradle/wrapper/gradle-wrapper.jar
+!gradle/wrapper/gradle-wrapper.properties
+
+# IntelliJ IDEA
+.idea/
+*.iml
+*.ipr
+*.iws
+out/
+
+# VS Code
+.vscode/
+!.vscode/settings.json
+!.vscode/extensions.json
+!.vscode/launch.json
+!.vscode/tasks.json
+
+# Logs
+logs/
+*.log
+
+# Environment files
+.env
+*.env
+
+# Java
+*.class
+*.jar
+
+# Temporary / Backup files
+*.tmp
+*.swp
+*.bak
+*~
+
+# Optional (for dev environments)
+plugins/
+server/
+run/
+
+# OS trash
+Thumbs.db
+ehthumbs.db
+Desktop.ini
