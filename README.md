@@ -1,4 +1,4 @@
-## ⚙️ What is JMCore?
+# ⚙️ What is JMCore?
 
 - **JMCore** is a standalone utility framework plugin for Minecraft: Java Edition (Paper), designed to serve as a foundation for fully custom *game-like* development.
 - JMCore provides a **public runtime API**, accessible to other Paper plugins that declare it as a dependency.
