@@ -1,0 +1,25 @@
+Text Display Name: text_test
+Bounding Box Height: 48
+Bounding Box Width: 48
+Tags:
+  - aj.blueprint.bone.center.child
+  - aj.blueprint.bone.center.child.text_display
+  - aj.blueprint.bone.center.decendant
+  - aj.blueprint.bone.center.decendant.text_display
+  - aj.blueprint.bone.center.tree
+  - aj.blueprint.display_node.text_test
+  - aj.blueprint.entity
+  - aj.blueprint.node
+  - aj.blueprint.node.text_test
+  - aj.blueprint.text_display
+  - aj.blueprint.text_display.text_test
+  - aj.global.bone.center.child
+  - aj.global.bone.center.child.text_display
+  - aj.global.bone.center.decendant
+  - aj.global.bone.center.decendant.text_display
+  - aj.global.bone.center.tree
+  - aj.global.display_node.text_test
+  - aj.global.entity
+  - aj.global.node
+  - aj.global.node.text_test
+  - aj.global.text_display

@@ -1,0 +1,2 @@
+blueprint/variants/default.txt
+blueprint/variants/new_variant.txt

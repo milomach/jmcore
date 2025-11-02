@@ -1,0 +1,8 @@
+bone menu -1,0,0,0,0,1,0,0.25,0,0,-1,0,0,0,0,1
+item_display item_test -1,0,0,0,0,1,0,0,0,0,-1,0,0,0,0,1
+block_display block_test -1,0,0,0,0,1,0,0,0,0,-1,0,0,0,0,1
+text_display text_test 1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1
+bone center -1,0,0,0,0,1,0,0,0,0,-1,0,0,0,0,1
+locator locator1 0,0.1875,0 0,0
+locator locator3 0,0.0625,0 0,0
+locator locator2 0,0.125,0 0,0

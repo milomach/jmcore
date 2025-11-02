@@ -1,0 +1,5 @@
+Tags:
+  - aj.global.entity
+  - aj.global.root
+  - aj.blueprint.entity
+  - aj.blueprint.root

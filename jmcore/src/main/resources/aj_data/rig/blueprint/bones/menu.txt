@@ -1,0 +1,33 @@
+Bone Name: menu
+Item: minecraft:white_dye
+Item Model Path: animated_java:blueprint/blueprint/menu
+Bounding Box Height: 48
+Bounding Box Width: 48
+Tags:
+  - aj.blueprint.bone
+  - aj.blueprint.bone.center.child
+  - aj.blueprint.bone.center.child.bone
+  - aj.blueprint.bone.center.decendant
+  - aj.blueprint.bone.center.decendant.bone
+  - aj.blueprint.bone.center.tree
+  - aj.blueprint.bone.center.tree.bone
+  - aj.blueprint.bone.menu
+  - aj.blueprint.bone.menu.tree
+  - aj.blueprint.bone.menu.tree.bone
+  - aj.blueprint.display_node.menu
+  - aj.blueprint.entity
+  - aj.blueprint.node
+  - aj.blueprint.node.menu
+  - aj.global.bone
+  - aj.global.bone.center.child
+  - aj.global.bone.center.child.bone
+  - aj.global.bone.center.decendant
+  - aj.global.bone.center.decendant.bone
+  - aj.global.bone.center.tree
+  - aj.global.bone.center.tree.bone
+  - aj.global.bone.menu.tree
+  - aj.global.bone.menu.tree.bone
+  - aj.global.display_node.menu
+  - aj.global.entity
+  - aj.global.node
+  - aj.global.node.menu

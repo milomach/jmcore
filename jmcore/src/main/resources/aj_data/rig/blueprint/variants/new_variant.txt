@@ -1,0 +1,4 @@
+Variant: new_variant
+Bones:
+  - center
+  - menu

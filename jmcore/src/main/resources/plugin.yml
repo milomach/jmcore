@@ -1,0 +1,17 @@
+name: JMCore
+version: 1.0
+main: com.jmcore.core.Main
+api-version: 1.21.10
+load: POSTWORLD
+
+permissions:
+  gui.use:
+    description: Allows use of JMCore commands
+    default: op
+
+commands:
+  jmcore:
+    description: Root command for all JMCore plugin features.
+    usage: /jmcore <subcommand> [args...]
+    permission: jmcore.use
+    aliases: [jmc, j]

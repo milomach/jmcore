@@ -1,0 +1,4 @@
+Variant: default
+Bones:
+  - center
+  - menu

@@ -1,0 +1,23 @@
+Bone Name: center
+Item: minecraft:white_dye
+Item Model Path: animated_java:blueprint/blueprint/center
+Bounding Box Height: 48
+Bounding Box Width: 48
+Tags:
+  - aj.blueprint.bone
+  - aj.blueprint.bone.center
+  - aj.blueprint.bone.center.tree
+  - aj.blueprint.bone.center.tree.bone
+  - aj.blueprint.display_node.center
+  - aj.blueprint.entity
+  - aj.blueprint.node
+  - aj.blueprint.node.center
+  - aj.global.bone
+  - aj.global.bone.center.tree
+  - aj.global.bone.center.tree.bone
+  - aj.global.display_node.center
+  - aj.global.entity
+  - aj.global.node
+  - aj.global.node.center
+  - aj.global.root.child
+  - aj.global.root.child.bone
