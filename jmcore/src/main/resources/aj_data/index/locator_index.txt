@@ -1,0 +1,3 @@
+blueprint/locators/locator1.txt
+blueprint/locators/locator3.txt
+blueprint/locators/locator2.txt

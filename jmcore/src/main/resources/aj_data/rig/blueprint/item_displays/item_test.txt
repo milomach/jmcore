@@ -1,0 +1,26 @@
+Item Display Name: item_test
+Item: minecraft:diamond
+Bounding Box Height: 48
+Bounding Box Width: 48
+Tags:
+  - aj.blueprint.bone.center.child
+  - aj.blueprint.bone.center.child.item_display
+  - aj.blueprint.bone.center.decendant
+  - aj.blueprint.bone.center.decendant.item_display
+  - aj.blueprint.bone.center.tree
+  - aj.blueprint.display_node.item_test
+  - aj.blueprint.entity
+  - aj.blueprint.item_display
+  - aj.blueprint.item_display.item_test
+  - aj.blueprint.node
+  - aj.blueprint.node.item_test
+  - aj.global.bone.center.child
+  - aj.global.bone.center.child.item_display
+  - aj.global.bone.center.decendant
+  - aj.global.bone.center.decendant.item_display
+  - aj.global.bone.center.tree
+  - aj.global.display_node.item_test
+  - aj.global.entity
+  - aj.global.item_display
+  - aj.global.node
+  - aj.global.node.item_test

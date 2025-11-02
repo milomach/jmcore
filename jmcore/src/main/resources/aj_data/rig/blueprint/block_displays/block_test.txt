@@ -1,0 +1,26 @@
+Block Display Name: block_test
+Block: stone
+Bounding Box Height: 48
+Bounding Box Width: 48
+Tags:
+  - aj.blueprint.block_display
+  - aj.blueprint.block_display.block_test
+  - aj.blueprint.bone.center.child
+  - aj.blueprint.bone.center.child.block_display
+  - aj.blueprint.bone.center.decendant
+  - aj.blueprint.bone.center.decendant.block_display
+  - aj.blueprint.bone.center.tree
+  - aj.blueprint.display_node.block_test
+  - aj.blueprint.entity
+  - aj.blueprint.node
+  - aj.blueprint.node.block_test
+  - aj.global.block_display
+  - aj.global.bone.center.child
+  - aj.global.bone.center.child.block_display
+  - aj.global.bone.center.decendant
+  - aj.global.bone.center.decendant.block_display
+  - aj.global.bone.center.tree
+  - aj.global.display_node.block_test
+  - aj.global.entity
+  - aj.global.node
+  - aj.global.node.block_test

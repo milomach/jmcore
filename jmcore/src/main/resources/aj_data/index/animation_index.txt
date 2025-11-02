@@ -1,0 +1,2 @@
+blueprint/animations/locator1.txt
+blueprint/animations/loop.txt
