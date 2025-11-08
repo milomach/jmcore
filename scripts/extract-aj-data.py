@@ -58,7 +58,7 @@ def clean_bone_name(raw_name):
 
 # --- Animation and default pose extraction logic ---
 
-def process_animation(namespace, animation):
+def process_animation(namespace, animation, return_included=False):
     """
     Extracts animation frames for bones, vanilla display types, and locators.
     For any frame where a bone, display, or locator does not have a line, the last known data is used.
@@ -68,12 +68,13 @@ def process_animation(namespace, animation):
       <frame> block_display <name> <matrix>
       <frame> text_display <name> <matrix>
       <frame> locator <name> <pos> <rot>
+    If return_included is True, also returns a dict of included elements.
     """
     frames_dir = os.path.join(
         AJ_FUNC_ROOT, namespace, "animations", animation, "zzz", "frames"
     )
     if not os.path.isdir(frames_dir):
-        return []
+        return ([] if not return_included else ([], None))
 
     # Gather all frame file names and sort numerically
     frame_files = sorted(
@@ -81,7 +82,7 @@ def process_animation(namespace, animation):
         key=lambda x: int(x.split('.')[0])
     )
     if not frame_files:
-        return []
+        return ([] if not return_included else ([], None))
 
     # --- Pass 1: Identify all included bones/displays/locators from frame 0 ---
     included_bones = {}
@@ -90,17 +91,15 @@ def process_animation(namespace, animation):
     included_text_displays = {}
     included_locators = {}
 
-    # Helper regexes
     locator_line_re = re.compile(
         r'"([^"]+)":\{"px":([-\d.eE]+),"py":([-\d.eE]+),"pz":([-\d.eE]+),"ry":([-\d.eE]+),"rx":([-\d.eE]+)\}'
     )
 
-    # Read frame 0
+    # Bones and vanilla displays from frame 0
     frame0_path = os.path.join(frames_dir, "0.mcfunction")
     if os.path.isfile(frame0_path):
         with open(frame0_path, "r") as f:
             frame0_lines = f.readlines()
-        # Bones and vanilla displays
         for line in frame0_lines:
             m = DATA_MERGE_RE.search(line)
             if m:
@@ -118,7 +117,7 @@ def process_animation(namespace, animation):
                     included_text_displays[display_name] = matrix
                 else:
                     included_bones[bone_name] = matrix
-        # Locators
+        # Locators from frame 0
         for line in frame0_lines:
             if "data modify entity @s data merge value" in line and '"locators":{' in line:
                 locator_data_match = re.search(r'"locators":\{(.*)\}', line)
@@ -214,7 +213,18 @@ def process_animation(namespace, animation):
             rot_str = f"{ry},{rx}"
             lines.append(f"{frame_str} locator {locator_name} {pos_str} {rot_str}")
 
-    return lines
+    # Return included dict if requested
+    if return_included:
+        included = {
+            "bones": included_bones,
+            "item_displays": included_item_displays,
+            "block_displays": included_block_displays,
+            "text_displays": included_text_displays,
+            "locators": included_locators,
+        }
+        return lines, included
+    else:
+        return lines
 
 def extract_locator_default_poses(namespace):
     """
@@ -752,8 +762,8 @@ def main():
         # Process animations
         animations = find_animations(ns)
         for anim in animations:
-            # process_animation(...) returns a list of textual lines for the animation
-            anim_lines = process_animation(ns, anim)
+            # Get both anim_lines and included dict
+            anim_lines, included = process_animation(ns, anim, return_included=True)
 
             # write the animation file to aj_data/rig/<ns>/animations/<anim>.txt
             anim_file = os.path.join(animations_dir, f"{anim}.txt")
@@ -768,18 +778,15 @@ def main():
                     f.write(line + "\n")
 
             # Determine whether this animation qualifies for animated_offset_index
-            # - Find all lines that are for frame 0 (start with "0 ")
-            # - If there is exactly one such line and it represents a locator ("0 locator ..."),
-            #   then add this animation file path to animated_offset_index_paths.
-            zero_frame_lines = [L for L in anim_lines if L.startswith("0 ")]
-            if len(zero_frame_lines) == 1:
-                single_zero = zero_frame_lines[0]
-                # Normalize whitespace at start, then check token 2 == 'locator'
-                # format is "<frame> <type> <name> ..."
-                parts = single_zero.strip().split()
-                if len(parts) >= 3 and parts[1] == "locator":
-                    # Add the same relative path used for animation index
-                    animated_offset_index_paths.append(rel_path)
+            # Must have exactly one bone and one locator, and nothing else
+            if (
+                len(included["bones"]) == 1 and
+                len(included["locators"]) == 1 and
+                len(included["item_displays"]) == 0 and
+                len(included["block_displays"]) == 0 and
+                len(included["text_displays"]) == 0
+            ):
+                animated_offset_index_paths.append(rel_path)
 
         # Write default_pose.txt for this namespace in the default_pose folder
         default_pose_lines = process_default_pose(ns)  # uses same logic as before
