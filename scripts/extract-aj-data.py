@@ -61,6 +61,7 @@ def clean_bone_name(raw_name):
 def process_animation(namespace, animation):
     """
     Extracts animation frames for bones, vanilla display types, and locators.
+    For any frame where a bone, display, or locator does not have a line, the last known data is used.
     Output format:
       <frame> bone <name> <matrix>
       <frame> item_display <name> <matrix>
@@ -74,53 +75,144 @@ def process_animation(namespace, animation):
     if not os.path.isdir(frames_dir):
         return []
 
-    lines = []
-    for fname in sorted(os.listdir(frames_dir), key=lambda x: int(x.split('.')[0]) if x.split('.')[0].isdigit() else 0):
-        if not FRAME_FILE_RE.match(fname):
-            continue
-        frame_num = fname.split('.')[0]
-        frame_path = os.path.join(frames_dir, fname)
-        with open(frame_path, "r") as f:
-            frame_lines = f.readlines()
+    # Gather all frame file names and sort numerically
+    frame_files = sorted(
+        [fname for fname in os.listdir(frames_dir) if FRAME_FILE_RE.match(fname)],
+        key=lambda x: int(x.split('.')[0])
+    )
+    if not frame_files:
+        return []
 
-        # Handle bones and vanilla displays
-        for line in frame_lines:
+    # --- Pass 1: Identify all included bones/displays/locators from frame 0 ---
+    included_bones = {}
+    included_item_displays = {}
+    included_block_displays = {}
+    included_text_displays = {}
+    included_locators = {}
+
+    # Helper regexes
+    locator_line_re = re.compile(
+        r'"([^"]+)":\{"px":([-\d.eE]+),"py":([-\d.eE]+),"pz":([-\d.eE]+),"ry":([-\d.eE]+),"rx":([-\d.eE]+)\}'
+    )
+
+    # Read frame 0
+    frame0_path = os.path.join(frames_dir, "0.mcfunction")
+    if os.path.isfile(frame0_path):
+        with open(frame0_path, "r") as f:
+            frame0_lines = f.readlines()
+        # Bones and vanilla displays
+        for line in frame0_lines:
             m = DATA_MERGE_RE.search(line)
             if m:
                 raw_bone_name = m.group(1)
                 matrix = m.group(2).replace("f", "")
-                # Determine type and name
                 bone_name = clean_bone_name(raw_bone_name)
-                # Check for vanilla display types by prefix
                 if bone_name.startswith("item_display_"):
                     display_name = bone_name[len("item_display_"):]
-                    lines.append(f"{frame_num} item_display {display_name} {matrix}")
+                    included_item_displays[display_name] = matrix
                 elif bone_name.startswith("block_display_"):
                     display_name = bone_name[len("block_display_"):]
-                    lines.append(f"{frame_num} block_display {display_name} {matrix}")
+                    included_block_displays[display_name] = matrix
                 elif bone_name.startswith("text_display_"):
                     display_name = bone_name[len("text_display_"):]
-                    lines.append(f"{frame_num} text_display {display_name} {matrix}")
+                    included_text_displays[display_name] = matrix
                 else:
-                    lines.append(f"{frame_num} bone {bone_name} {matrix}")
-
-        # Handle locators
-        for line in frame_lines:
+                    included_bones[bone_name] = matrix
+        # Locators
+        for line in frame0_lines:
             if "data modify entity @s data merge value" in line and '"locators":{' in line:
-                # Extract locator data
                 locator_data_match = re.search(r'"locators":\{(.*)\}', line)
                 if locator_data_match:
                     locator_data_str = locator_data_match.group(1)
-                    # Parse each locator entry
-                    locators = re.findall(
-                        r'"([^"]+)":\{"px":([-\d.eE]+),"py":([-\d.eE]+),"pz":([-\d.eE]+),"ry":([-\d.eE]+),"rx":([-\d.eE]+)\}',
-                        locator_data_str
-                    )
-                    for locator in locators:
+                    for locator in locator_line_re.findall(locator_data_str):
                         locator_name, px, py, pz, ry, rx = locator
-                        pos_str = f"{px},{py},{pz}"
-                        rot_str = f"{ry},{rx}"
-                        lines.append(f"{frame_num} locator {locator_name} {pos_str} {rot_str}")
+                        included_locators[locator_name] = (px, py, pz, ry, rx)
+
+    # --- Pass 2: For each frame, fill in missing data with last known values ---
+    # Prepare last known values
+    last_bones = dict(included_bones)
+    last_item_displays = dict(included_item_displays)
+    last_block_displays = dict(included_block_displays)
+    last_text_displays = dict(included_text_displays)
+    last_locators = dict(included_locators)
+
+    # Build a mapping from frame number to file name for fast lookup
+    frame_file_map = {int(fname.split('.')[0]): fname for fname in frame_files}
+    if not frame_file_map:
+        return []
+
+    min_frame = min(frame_file_map.keys())
+    max_frame = max(frame_file_map.keys())
+
+    lines = []
+    # For each frame in the full range, even if the file does not exist
+    for frame_num in range(min_frame, max_frame + 1):
+        # If the frame file exists, update last known values
+        if frame_num in frame_file_map:
+            frame_path = os.path.join(frames_dir, frame_file_map[frame_num])
+            with open(frame_path, "r") as f:
+                frame_lines = f.readlines()
+
+            # Track which were updated this frame
+            updated_bones = set()
+            updated_item_displays = set()
+            updated_block_displays = set()
+            updated_text_displays = set()
+            updated_locators = set()
+
+            # Bones and vanilla displays
+            for line in frame_lines:
+                m = DATA_MERGE_RE.search(line)
+                if m:
+                    raw_bone_name = m.group(1)
+                    matrix = m.group(2).replace("f", "")
+                    bone_name = clean_bone_name(raw_bone_name)
+                    if bone_name.startswith("item_display_"):
+                        display_name = bone_name[len("item_display_"):]
+                        last_item_displays[display_name] = matrix
+                        updated_item_displays.add(display_name)
+                    elif bone_name.startswith("block_display_"):
+                        display_name = bone_name[len("block_display_"):]
+                        last_block_displays[display_name] = matrix
+                        updated_block_displays.add(display_name)
+                    elif bone_name.startswith("text_display_"):
+                        display_name = bone_name[len("text_display_"):]
+                        last_text_displays[display_name] = matrix
+                        updated_text_displays.add(display_name)
+                    else:
+                        last_bones[bone_name] = matrix
+                        updated_bones.add(bone_name)
+
+            # Locators
+            for line in frame_lines:
+                if "data modify entity @s data merge value" in line and '"locators":{' in line:
+                    locator_data_match = re.search(r'"locators":\{(.*)\}', line)
+                    if locator_data_match:
+                        locator_data_str = locator_data_match.group(1)
+                        for locator in locator_line_re.findall(locator_data_str):
+                            locator_name, px, py, pz, ry, rx = locator
+                            last_locators[locator_name] = (px, py, pz, ry, rx)
+                            updated_locators.add(locator_name)
+
+        # Output for all included, using last known values
+        frame_str = str(frame_num)
+        for bone_name in included_bones:
+            matrix = last_bones[bone_name]
+            lines.append(f"{frame_str} bone {bone_name} {matrix}")
+        for display_name in included_item_displays:
+            matrix = last_item_displays[display_name]
+            lines.append(f"{frame_str} item_display {display_name} {matrix}")
+        for display_name in included_block_displays:
+            matrix = last_block_displays[display_name]
+            lines.append(f"{frame_str} block_display {display_name} {matrix}")
+        for display_name in included_text_displays:
+            matrix = last_text_displays[display_name]
+            lines.append(f"{frame_str} text_display {display_name} {matrix}")
+        for locator_name in included_locators:
+            px, py, pz, ry, rx = last_locators[locator_name]
+            pos_str = f"{px},{py},{pz}"
+            rot_str = f"{ry},{rx}"
+            lines.append(f"{frame_str} locator {locator_name} {pos_str} {rot_str}")
 
     return lines
 
