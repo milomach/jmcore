@@ -42,6 +42,9 @@ public class PoseStateManager {
      * Processes all enabled offset sources for a rig, in order.
      * For each included entity/locator, accumulates offset transforms (translation, rotation, scale).
      * This is additive: multiple offset sources can contribute to the same entity/locator.
+     * 
+     * For animated offset sources, applies the animation's bone transform to all included entities,
+     * and the animation's locator transform to all included locators.
      */
     public static void processOffsetSources(AJRigInstance rig) {
         RigPoseState state = rigPoseStates.get(rig);
@@ -49,30 +52,97 @@ public class PoseStateManager {
         sources.sort(Comparator.comparingInt(AJOffsetSource::getOrder));
         for (AJOffsetSource src : sources) {
             if (!src.isEnabled()) continue;
-            // For each included bone, accumulate offset
-            for (String bone : src.getIncludedBones()) {
-                state.includeEntity(bone, PoseEntityType.BONE);
-                state.accumulateOffset(bone, PoseEntityType.BONE, src.getTranslation(), src.getRotation(), src.getScale());
-            }
-            // For each included item display, accumulate offset
-            for (String item : src.getIncludedItemDisplays()) {
-                state.includeEntity(item, PoseEntityType.ITEM_DISPLAY);
-                state.accumulateOffset(item, PoseEntityType.ITEM_DISPLAY, src.getTranslation(), src.getRotation(), src.getScale());
-            }
-            // For each included block display, accumulate offset
-            for (String block : src.getIncludedBlockDisplays()) {
-                state.includeEntity(block, PoseEntityType.BLOCK_DISPLAY);
-                state.accumulateOffset(block, PoseEntityType.BLOCK_DISPLAY, src.getTranslation(), src.getRotation(), src.getScale());
-            }
-            // For each included text display, accumulate offset
-            for (String text : src.getIncludedTextDisplays()) {
-                state.includeEntity(text, PoseEntityType.TEXT_DISPLAY);
-                state.accumulateOffset(text, PoseEntityType.TEXT_DISPLAY, src.getTranslation(), src.getRotation(), src.getScale());
-            }
-            // For each included locator, accumulate offset
-            for (String locator : src.getIncludedLocators()) {
-                state.includeLocator(locator);
-                state.accumulateLocatorOffset(locator, src.getTranslation(), src.getRotation());
+
+            if (src.getOffsetMode() == AJOffsetSource.OffsetMode.ANIMATED) {
+                String ns = src.getExportNamespace();
+                String anim = src.getAnimationName();
+                int frame = src.getCurrentFrame();
+
+                // --- Find the bone and locator for this animation (should be exactly one of each) ---
+                Set<String> animBones = AJFrameData.getBonesForFrame(ns, anim, frame);
+                Set<String> animLocators = AJFrameData.getLocatorsForFrame(ns, anim, frame);
+
+                // Get the bone transform (if present)
+                Vector3f boneTranslation = new Vector3f(0, 0, 0);
+                Quaternionf boneRotation = new Quaternionf().identity();
+                Vector3f boneScale = new Vector3f(1, 1, 1);
+                if (!animBones.isEmpty()) {
+                    String animBone = animBones.iterator().next();
+                    AJFrameData.BoneFrameData boneFrame = AJFrameData.getBoneFrameData(ns, anim, frame, animBone);
+                    if (boneFrame != null) {
+                        boneTranslation.set(boneFrame.translation);
+                        boneRotation.set(boneFrame.rotation);
+                        boneScale.set(boneFrame.scale);
+                    }
+                }
+
+                // Get the locator transform (if present)
+                Vector3f locatorTranslation = new Vector3f(0, 0, 0);
+                Quaternionf locatorRotation = new Quaternionf().identity();
+                if (!animLocators.isEmpty()) {
+                    String animLocator = animLocators.iterator().next();
+                    AJFrameData.LocatorFrameData locatorFrame = AJFrameData.getLocatorFrameData(ns, anim, frame, animLocator);
+                    if (locatorFrame != null) {
+                        locatorTranslation.set(locatorFrame.position);
+                        // Locator rotation is a Vector2f (ry, rx), but PoseStateManager expects Quaternionf
+                        // You may need to convert Vector2f (yaw, pitch) to Quaternionf here
+                        float ry = locatorFrame.rotation.x;
+                        float rx = locatorFrame.rotation.y;
+                        locatorRotation.identity()
+                            .rotateY((float)Math.toRadians(ry))
+                            .rotateX((float)Math.toRadians(rx));
+                    }
+                }
+
+                // Apply the bone transform to all included bones, item displays, block displays, and text displays
+                for (String bone : src.getIncludedBones()) {
+                    state.includeEntity(bone, PoseEntityType.BONE);
+                    state.accumulateOffset(bone, PoseEntityType.BONE, boneTranslation, boneRotation, boneScale);
+                }
+                for (String item : src.getIncludedItemDisplays()) {
+                    state.includeEntity(item, PoseEntityType.ITEM_DISPLAY);
+                    state.accumulateOffset(item, PoseEntityType.ITEM_DISPLAY, boneTranslation, boneRotation, boneScale);
+                }
+                for (String block : src.getIncludedBlockDisplays()) {
+                    state.includeEntity(block, PoseEntityType.BLOCK_DISPLAY);
+                    state.accumulateOffset(block, PoseEntityType.BLOCK_DISPLAY, boneTranslation, boneRotation, boneScale);
+                }
+                for (String text : src.getIncludedTextDisplays()) {
+                    state.includeEntity(text, PoseEntityType.TEXT_DISPLAY);
+                    state.accumulateOffset(text, PoseEntityType.TEXT_DISPLAY, boneTranslation, boneRotation, boneScale);
+                }
+                // Apply the locator transform to all included locators
+                for (String locator : src.getIncludedLocators()) {
+                    state.includeLocator(locator);
+                    state.accumulateLocatorOffset(locator, locatorTranslation, locatorRotation);
+                }
+
+                // Advance the frame for this animated offset source
+                int frameCount = AJFrameData.getFrameCount(ns, anim);
+                src.advanceFrame(frameCount);
+
+            } else {
+                // --- Static offset mode: accumulate static transform as before ---
+                for (String bone : src.getIncludedBones()) {
+                    state.includeEntity(bone, PoseEntityType.BONE);
+                    state.accumulateOffset(bone, PoseEntityType.BONE, src.getTranslation(), src.getRotation(), src.getScale());
+                }
+                for (String item : src.getIncludedItemDisplays()) {
+                    state.includeEntity(item, PoseEntityType.ITEM_DISPLAY);
+                    state.accumulateOffset(item, PoseEntityType.ITEM_DISPLAY, src.getTranslation(), src.getRotation(), src.getScale());
+                }
+                for (String block : src.getIncludedBlockDisplays()) {
+                    state.includeEntity(block, PoseEntityType.BLOCK_DISPLAY);
+                    state.accumulateOffset(block, PoseEntityType.BLOCK_DISPLAY, src.getTranslation(), src.getRotation(), src.getScale());
+                }
+                for (String text : src.getIncludedTextDisplays()) {
+                    state.includeEntity(text, PoseEntityType.TEXT_DISPLAY);
+                    state.accumulateOffset(text, PoseEntityType.TEXT_DISPLAY, src.getTranslation(), src.getRotation(), src.getScale());
+                }
+                for (String locator : src.getIncludedLocators()) {
+                    state.includeLocator(locator);
+                    state.accumulateLocatorOffset(locator, src.getTranslation(), src.getRotation());
+                }
             }
         }
     }
@@ -101,7 +171,7 @@ public class PoseStateManager {
             // ignore
         }
 
-        // 1) User animation sources (existing logic)
+        // 1) User animation sources
         List<AJAnimationSource> sources = new ArrayList<>(rig.getAllAnimationSources());
         sources.sort(Comparator.comparingInt(AJAnimationSource::getOrder));
         for (AJAnimationSource src : sources) {
@@ -144,30 +214,8 @@ public class PoseStateManager {
             } catch (Throwable t) {}
 
             // Advance frames if playing (unchanged logic)
-            if (src.isPlaying()) {
-                int frameCount = AJFrameData.getFrameCount(rig.getExportNamespace(), src.getAnimationName());
-                if (frameCount <= 0) {
-                    // TEMP DEBUG: warn if animation has zero frames
-                    System.out.println("[PoseStateManager] Warning: animation has zero frames -> ns=" + rig.getExportNamespace() + " anim=" + src.getAnimationName());
-                }
-                if (src.getCurrentFrame() >= frameCount - 1) {
-                    switch (src.getEndBehavior()) {
-                        case HOLD:
-                            src.setCurrentFrame(frameCount - 1);
-                            src.setPlaying(false);
-                            break;
-                        case RESET:
-                            src.setCurrentFrame(0);
-                            src.setPlaying(false);
-                            break;
-                        case LOOP:
-                            src.setCurrentFrame(0);
-                            break;
-                    }
-                } else {
-                    src.setCurrentFrame(src.getCurrentFrame() + 1);
-                }
-            }
+            int frameCount = AJFrameData.getFrameCount(rig.getExportNamespace(), src.getAnimationName());
+            src.advanceFrame(frameCount);
         }
 
         // TEMP DEBUG: before default pose processing, how many entity poses exist (from user animations/offsets)

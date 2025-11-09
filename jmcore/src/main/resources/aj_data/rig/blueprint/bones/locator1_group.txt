@@ -1,0 +1,33 @@
+Bone Name: locator1_group
+Item: minecraft:white_dye
+Item Model Path: animated_java:blueprint/blueprint/locator1_group
+Bounding Box Height: 48
+Bounding Box Width: 48
+Tags:
+  - aj.blueprint.bone
+  - aj.blueprint.bone.center.child
+  - aj.blueprint.bone.center.child.bone
+  - aj.blueprint.bone.center.decendant
+  - aj.blueprint.bone.center.decendant.bone
+  - aj.blueprint.bone.center.tree
+  - aj.blueprint.bone.center.tree.bone
+  - aj.blueprint.bone.locator1_group
+  - aj.blueprint.bone.locator1_group.tree
+  - aj.blueprint.bone.locator1_group.tree.bone
+  - aj.blueprint.display_node.locator1_group
+  - aj.blueprint.entity
+  - aj.blueprint.node
+  - aj.blueprint.node.locator1_group
+  - aj.global.bone
+  - aj.global.bone.center.child
+  - aj.global.bone.center.child.bone
+  - aj.global.bone.center.decendant
+  - aj.global.bone.center.decendant.bone
+  - aj.global.bone.center.tree
+  - aj.global.bone.center.tree.bone
+  - aj.global.bone.locator1_group.tree
+  - aj.global.bone.locator1_group.tree.bone
+  - aj.global.display_node.locator1_group
+  - aj.global.entity
+  - aj.global.node
+  - aj.global.node.locator1_group

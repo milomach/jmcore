@@ -126,4 +126,48 @@ public class AJAnimationSource {
         }
         rig.notifyAnimationSourceChanged();
     }
+    
+    /**
+     * Advances the current frame if playing, using the end behavior.
+     * Returns true if the frame was advanced, false if not playing or at end.
+     * Requires the caller to provide the frame count for the current animation.
+     */
+    public boolean advanceFrame(int frameCount) {
+        if (!playing || frameCount <= 0) return false;
+        if (currentFrame < frameCount - 1) {
+            currentFrame++;
+            return true;
+        } else {
+            // Handle end behavior
+            switch (endBehavior) {
+                case HOLD:
+                    currentFrame = frameCount - 1;
+                    playing = false;
+                    break;
+                case RESET:
+                    currentFrame = 0;
+                    playing = false;
+                    break;
+                case LOOP:
+                    currentFrame = 0;
+                    break;
+            }
+            return false;
+        }
+    }
+
+    /**
+     * Stops playback and resets to frame 0.
+     */
+    public void stop() {
+        playing = false;
+        currentFrame = 0;
+    }
+
+    /**
+     * Starts playback from the current frame.
+     */
+    public void play() {
+        playing = true;
+    }
 }

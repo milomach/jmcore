@@ -13,6 +13,7 @@ import com.jmcore.core.aj.data.AJLocatorData;
 import com.jmcore.core.aj.data.AJRootData;
 import com.jmcore.core.aj.data.AJTextDisplayData;
 import com.jmcore.core.aj.data.AJVariantData;
+import com.jmcore.core.aj.data.AnimatedOffsetRegistry;
 import com.jmcore.core.aj.posing.PoseTicker;
 import com.jmcore.core.aj.rig_instance.AJRigCleanupUtil;
 import com.jmcore.core.aj.rig_instance.AJRigInstance;
@@ -129,6 +130,7 @@ public final class Main extends JavaPlugin implements DependencyProvider {
         AJRootData.loadAllRootData();
         AJVariantData.loadAllVariantData();
         AJDefaultPoseData.loadAllDefaultPoses();
+        AnimatedOffsetRegistry.loadAllAnimatedOffsets();
         
         // Register player event listener (pass tracker)
         getServer().getPluginManager().registerEvents(new PlayerListener(playerDataManager, tracker, cursorCleanup, ajRigManager, this), this);
