@@ -1,4 +1,5 @@
 Variant: new_variant
 Bones:
   - center
+  - locator1_group
   - menu

@@ -1,2 +1,3 @@
 blueprint/bones/menu.txt
+blueprint/bones/locator1_group.txt
 blueprint/bones/center.txt

@@ -1,4 +1,5 @@
 Variant: default
 Bones:
   - center
+  - locator1_group
   - menu

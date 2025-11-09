@@ -28,7 +28,8 @@ public class AJTestSetOffsetSubCommand extends AbstractSubCommand {
     @Override
     public String getUsage() {
         return "/jmcore ajtest offset <playername> source <create|remove>\n"
-             + "/jmcore ajtest offset <playername> set <rotation|translation|scale> <axis> <value>";
+             + "/jmcore ajtest offset <playername> set <rotation|translation|scale> <axis> <value>\n"
+             + "/jmcore ajtest offset <playername> mode <static|animated>";
     }
 
     @Override
@@ -67,7 +68,11 @@ public class AJTestSetOffsetSubCommand extends AbstractSubCommand {
                     if (src != null) {
                         // By default, include all bones for demonstration
                         src.setIncludedBones(rig.getBoneNames());
-                        sender.sendMessage("Offset source '" + TEST_SOURCE_ID + "' created for " + target.getName() + ".");
+                        // Set up animated offset fields for testing
+                        src.setEndBehavior(AJOffsetSource.EndBehavior.LOOP);
+                        // Hardcoded test animation/namespace for demonstration
+                        src.setAnimatedOffset("blueprint", "locator1");
+                        sender.sendMessage("Offset source '" + TEST_SOURCE_ID + "' created for " + target.getName() + ". (animation=locator1, exportNamespace=blueprint, endBehavior=LOOP)");
                     } else {
                         sender.sendMessage("Failed to create offset source (already exists?).");
                     }
@@ -85,6 +90,33 @@ public class AJTestSetOffsetSubCommand extends AbstractSubCommand {
                 default:
                     sender.sendMessage("Unknown source action: " + subAction + ". Use create or remove.");
                     return true;
+            }
+        }
+
+        if (action.equals("mode")) {
+            if (args.length < 3) {
+                sender.sendMessage("Usage: /jmcore ajtest offset <playername> mode <static|animated>");
+                return true;
+            }
+            AJOffsetSource src = rig.getOffsetSource(TEST_SOURCE_ID);
+            if (src == null) {
+                sender.sendMessage("No offset source '" + TEST_SOURCE_ID + "' exists for this rig. Use 'source create' first.");
+                return true;
+            }
+            String mode = args[2].toLowerCase();
+            if (mode.equals("static")) {
+                src.setOffsetMode(AJOffsetSource.OffsetMode.STATIC);
+                src.stop(); // Also sets playing=false and resets frame
+                sender.sendMessage("Set offset source '" + TEST_SOURCE_ID + "' to STATIC mode and stopped playback.");
+                return true;
+            } else if (mode.equals("animated")) {
+                src.setOffsetMode(AJOffsetSource.OffsetMode.ANIMATED);
+                src.play(); // Sets playing=true
+                sender.sendMessage("Set offset source '" + TEST_SOURCE_ID + "' to ANIMATED mode and started playback.");
+                return true;
+            } else {
+                sender.sendMessage("Unknown mode: " + mode + ". Use static or animated.");
+                return true;
             }
         }
 
@@ -170,7 +202,7 @@ public class AJTestSetOffsetSubCommand extends AbstractSubCommand {
             }
         }
 
-        sender.sendMessage("Unknown offset action: " + action + ". Use source or set.");
+        sender.sendMessage("Unknown offset action: " + action + ". Use source, set, or mode.");
         return true;
     }
 
@@ -180,13 +212,16 @@ public class AJTestSetOffsetSubCommand extends AbstractSubCommand {
             return org.bukkit.Bukkit.getOnlinePlayers().stream().map(Player::getName).toList();
         }
         if (args.length == 2) {
-            return List.of("source", "set");
+            return List.of("source", "set", "mode");
         }
         if (args.length == 3 && args[1].equalsIgnoreCase("source")) {
             return List.of("create", "remove");
         }
         if (args.length == 3 && args[1].equalsIgnoreCase("set")) {
             return List.of("rotation", "translation", "scale");
+        }
+        if (args.length == 3 && args[1].equalsIgnoreCase("mode")) {
+            return List.of("static", "animated");
         }
         if (args.length == 4 && args[1].equalsIgnoreCase("set")) {
             String type = args[2].toLowerCase();

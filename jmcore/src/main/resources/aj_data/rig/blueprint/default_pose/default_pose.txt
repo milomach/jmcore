@@ -1,4 +1,5 @@
 bone menu -1,0,0,0,0,1,0,0.25,0,0,-1,0,0,0,0,1
+bone locator1_group -1,0,0,0,0,1,0,0,0,0,-1,0,0,0,0,1
 item_display item_test -1,0,0,0,0,1,0,0,0,0,-1,0,0,0,0,1
 block_display block_test -1,0,0,0,0,1,0,0,0,0,-1,0,0,0,0,1
 text_display text_test 1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1
