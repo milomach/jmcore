@@ -12,6 +12,9 @@ import java.util.concurrent.ConcurrentHashMap;
  * Uses aj_data/index/bone_index.txt to find all bone files.
  */
 public class AJBoneData {
+    // Special constant for model root parent (not a bone named "root")
+    public static final String PARENT_MODEL_ROOT = "__MODEL_ROOT__";
+
     // exportNamespace -> boneName -> BoneData
     private static final Map<String, Map<String, BoneData>> boneDataMap = new ConcurrentHashMap<>();
 
@@ -22,14 +25,26 @@ public class AJBoneData {
         public final int boundingBoxHeight;
         public final int boundingBoxWidth;
         public final Set<String> tags;
+        /**
+         * The parent bone name, or PARENT_MODEL_ROOT if at the root, or null if unknown.
+         */
+        public final String parent;
 
-        public BoneData(String boneName, String item, String itemModelPath, int boundingBoxHeight, int boundingBoxWidth, Set<String> tags) {
+        public BoneData(String boneName, String item, String itemModelPath, int boundingBoxHeight, int boundingBoxWidth, Set<String> tags, String parent) {
             this.boneName = boneName;
             this.item = item;
             this.itemModelPath = itemModelPath;
             this.boundingBoxHeight = boundingBoxHeight;
             this.boundingBoxWidth = boundingBoxWidth;
             this.tags = Collections.unmodifiableSet(tags);
+            this.parent = parent;
+        }
+
+        /**
+         * Returns the parent bone name, or PARENT_MODEL_ROOT if at the root, or null if unknown.
+         */
+        public String getParent() {
+            return parent;
         }
     }
 
@@ -78,7 +93,25 @@ public class AJBoneData {
                         else if (inTags && l.startsWith("-")) tags.add(l.substring(1).trim());
                     }
                     if (bName == null) bName = boneName;
-                    BoneData data = new BoneData(bName, item, itemModelPath, bboxHeight, bboxWidth, tags);
+
+                    // --- Parent detection logic ---
+                    String parent = null;
+                    for (String tag : tags) {
+                        if (tag.equals("aj.global.root.child")) {
+                            parent = PARENT_MODEL_ROOT;
+                            break;
+                        } else if (tag.startsWith("aj.global.bone.") && tag.endsWith(".child")) {
+                            // Example: aj.global.bone.center.child
+                            String[] tagParts = tag.split("\\.");
+                            if (tagParts.length >= 5) {
+                                parent = tagParts[3]; // <bone_name>
+                                break;
+                            }
+                        }
+                    }
+                    // If no parent tag, parent remains null
+
+                    BoneData data = new BoneData(bName, item, itemModelPath, bboxHeight, bboxWidth, tags, parent);
                     boneDataMap.computeIfAbsent(exportNamespace, k -> new ConcurrentHashMap<>()).put(boneName, data);
                 }
             }

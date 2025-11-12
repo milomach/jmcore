@@ -12,6 +12,8 @@ import java.util.concurrent.ConcurrentHashMap;
  * Uses aj_data/index/block_display_index.txt to find all block display files.
  */
 public class AJBlockDisplayData {
+    public static final String PARENT_MODEL_ROOT = "__MODEL_ROOT__";
+
     // exportNamespace -> blockDisplayName -> BlockDisplayData
     private static final Map<String, Map<String, BlockDisplayData>> blockDisplayDataMap = new ConcurrentHashMap<>();
 
@@ -21,14 +23,21 @@ public class AJBlockDisplayData {
         public final int boundingBoxHeight;
         public final int boundingBoxWidth;
         public final Set<String> tags;
+        /**
+         * The parent bone name, or PARENT_MODEL_ROOT if at the root, or null if unknown.
+         */
+        public final String parent;
 
-        public BlockDisplayData(String blockDisplayName, String block, int boundingBoxHeight, int boundingBoxWidth, Set<String> tags) {
+        public BlockDisplayData(String blockDisplayName, String block, int boundingBoxHeight, int boundingBoxWidth, Set<String> tags, String parent) {
             this.blockDisplayName = blockDisplayName;
             this.block = block;
             this.boundingBoxHeight = boundingBoxHeight;
             this.boundingBoxWidth = boundingBoxWidth;
             this.tags = Collections.unmodifiableSet(tags);
+            this.parent = parent;
         }
+
+        public String getParent() { return parent; }
     }
 
     /**
@@ -54,12 +63,12 @@ public class AJBlockDisplayData {
                 if (parts.length < 3) continue;
                 String exportNamespace = parts[0];
                 String blockDisplayName = parts[2].replace(".txt", "");
-                try (InputStream blockStream = AJBlockDisplayData.class.getClassLoader().getResourceAsStream(resourcePath)) {
-                    if (blockStream == null) {
+                try (InputStream is = AJBlockDisplayData.class.getClassLoader().getResourceAsStream(resourcePath)) {
+                    if (is == null) {
                         System.out.println("[AJBlockDisplayData] Block display file not found: " + resourcePath);
                         continue;
                     }
-                    BufferedReader reader = new BufferedReader(new InputStreamReader(blockStream));
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(is));
                     String bName = null, block = null;
                     int bboxHeight = 0, bboxWidth = 0;
                     Set<String> tags = new HashSet<>();
@@ -78,13 +87,26 @@ public class AJBlockDisplayData {
                         } else if (l.equalsIgnoreCase("Tags:")) inTags = true;
                         else if (inTags && l.startsWith("-")) tags.add(l.substring(1).trim());
                     }
-                    if (bName == null) {
-                        System.out.println("[AJBlockDisplayData] Missing required field: Block Display Name in " + resourcePath);
-                        continue;
+                    if (bName == null) bName = blockDisplayName;
+
+                    // --- Parent detection logic ---
+                    String parent = null;
+                    for (String tag : tags) {
+                        if (tag.equals("aj.global.root.child")) {
+                            parent = PARENT_MODEL_ROOT;
+                            break;
+                        } else if (tag.startsWith("aj.global.bone.") && tag.endsWith(".child")) {
+                            String[] tagParts = tag.split("\\.");
+                            if (tagParts.length >= 5) {
+                                parent = tagParts[3];
+                                break;
+                            }
+                        }
                     }
-                    BlockDisplayData data = new BlockDisplayData(bName, block, bboxHeight, bboxWidth, tags);
+                    // If no parent tag, parent remains null
+
+                    BlockDisplayData data = new BlockDisplayData(bName, block, bboxHeight, bboxWidth, tags, parent);
                     blockDisplayDataMap.computeIfAbsent(exportNamespace, k -> new ConcurrentHashMap<>()).put(blockDisplayName, data);
-                    System.out.println("[AJBlockDisplayData] Loaded block display: " + bName + " in namespace: " + exportNamespace);
                 }
             }
         } catch (Exception e) {
@@ -93,17 +115,11 @@ public class AJBlockDisplayData {
         }
     }
 
-    /**
-     * Returns the BlockDisplayData for the given export namespace and block display name, or null if not loaded.
-     */
     public static BlockDisplayData getBlockDisplayData(String exportNamespace, String blockDisplayName) {
         Map<String, BlockDisplayData> nsMap = blockDisplayDataMap.get(exportNamespace);
         return nsMap != null ? nsMap.get(blockDisplayName) : null;
     }
 
-    /**
-     * Returns a set of all block display names for the given export namespace.
-     */
     public static Set<String> getAllBlockDisplayNames(String exportNamespace) {
         Map<String, BlockDisplayData> nsMap = blockDisplayDataMap.get(exportNamespace);
         if (nsMap == null) return Collections.emptySet();

@@ -19,6 +19,8 @@ import java.util.concurrent.ConcurrentHashMap;
  *     ...
  */
 public class AJLocatorData {
+    public static final String PARENT_MODEL_ROOT = "__MODEL_ROOT__";
+
     // exportNamespace -> locatorName -> LocatorData
     private static final Map<String, Map<String, LocatorData>> locatorDataMap = new ConcurrentHashMap<>();
 
@@ -26,16 +28,22 @@ public class AJLocatorData {
         private final String locatorName;
         private final String entityType;
         private final Set<String> tags;
+        /**
+         * The parent bone name, or PARENT_MODEL_ROOT if at the root, or null if unknown.
+         */
+        private final String parent;
 
-        public LocatorData(String locatorName, String entityType, Set<String> tags) {
+        public LocatorData(String locatorName, String entityType, Set<String> tags, String parent) {
             this.locatorName = locatorName;
             this.entityType = entityType;
             this.tags = tags == null ? Collections.emptySet() : Collections.unmodifiableSet(new HashSet<>(tags));
+            this.parent = parent;
         }
 
         public String getLocatorName() { return locatorName; }
         public String getEntityType() { return entityType; }
         public Set<String> getTags() { return tags; }
+        public String getParent() { return parent; }
     }
 
     /**
@@ -57,7 +65,6 @@ public class AJLocatorData {
                 line = line.trim();
                 if (line.isEmpty() || line.startsWith("#")) continue;
                 String resourcePath = resourceRoot + line;
-                // Extract exportNamespace and locatorName from the path (e.g., blueprint/locators/locator1.txt)
                 String[] parts = line.split("/");
                 if (parts.length < 3) continue;
                 String exportNamespace = parts[0];
@@ -110,7 +117,24 @@ public class AJLocatorData {
             if (foundLocatorName == null || foundLocatorName.isEmpty()) {
                 foundLocatorName = locatorName;
             }
-            return new LocatorData(foundLocatorName, entityType, tags);
+
+            // --- Parent detection logic ---
+            String parent = null;
+            for (String tag : tags) {
+                if (tag.equals("aj.global.root.child")) {
+                    parent = PARENT_MODEL_ROOT;
+                    break;
+                } else if (tag.startsWith("aj.global.bone.") && tag.endsWith(".child")) {
+                    String[] tagParts = tag.split("\\.");
+                    if (tagParts.length >= 5) {
+                        parent = tagParts[3];
+                        break;
+                    }
+                }
+            }
+            // If no parent tag, parent remains null
+
+            return new LocatorData(foundLocatorName, entityType, tags, parent);
         } catch (Exception e) {
             System.out.println("[AJLocatorData] Error parsing locator file: " + resourcePath);
             e.printStackTrace();
@@ -118,17 +142,11 @@ public class AJLocatorData {
         }
     }
 
-    /**
-     * Returns the LocatorData for the given export namespace and locator name, or null if not loaded.
-     */
     public static LocatorData getLocatorData(String exportNamespace, String locatorName) {
         Map<String, LocatorData> nsMap = locatorDataMap.get(exportNamespace);
         return nsMap == null ? null : nsMap.get(locatorName);
     }
 
-    /**
-     * Returns a set of all locator names for the given export namespace.
-     */
     public static Set<String> getAllLocatorNames(String exportNamespace) {
         Map<String, LocatorData> nsMap = locatorDataMap.get(exportNamespace);
         return nsMap == null ? Collections.emptySet() : Collections.unmodifiableSet(nsMap.keySet());
