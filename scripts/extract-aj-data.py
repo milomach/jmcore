@@ -675,38 +675,67 @@ def extract_locator_names_from_namespace(namespace):
 def process_locators(namespace, locators_dir):
     """
     For the given namespace, creates a text file for each unique locator in locators_dir.
-    Each file contains just the locator name.
+    Each file contains the locator name, entity (if any), and tags (if any).
 
-    The names of all locators are extracted in the same way as for the locators
-    in the generated default pose files.
-
-    Args:
-        namespace (str): The export namespace.
-        locators_dir (str): The directory where the locator files will be generated.
-
-    Returns:
-        list: A list of relative paths to the generated locator files.
+    Locators that use an entity are detected by parsing
+    data/animated_java/function/<namespace>/zzz/summon/as_data_entity.mcfunction.
+    The entity type and tags are included in the locator file.
+    Locators without an entity still get a file with the same format, but with empty entity and tags.
     """
     # Extract locator names using the same logic as for default pose files
     locators_dir_path = os.path.join(AJ_FUNC_ROOT, namespace, "zzz", "zzz", "set_default_pose")
     if not os.path.isdir(locators_dir_path):
         return []
 
-    locator_files = []
-
-    # Iterate over all files in the set_default_pose directory
+    # 1. Gather all locator names from set_default_pose
+    locator_names = set()
     for filename in os.listdir(locators_dir_path):
         if filename.startswith("as_locator_") and filename.endswith(".mcfunction"):
             locator_name = filename[len("as_locator_"):-len(".mcfunction")]
+            locator_names.add(locator_name)
 
-            # Generate the locator file
-            locator_file = os.path.join(locators_dir, f"{locator_name}.txt")
-            with open(locator_file, "w") as lf:
-                lf.write(f"Locator Name: {locator_name}\n")
+    # 2. Parse as_data_entity.mcfunction for locator entities and tags
+    as_data_entity_path = os.path.join(
+        AJ_FUNC_ROOT, namespace, "zzz", "summon", "as_data_entity.mcfunction"
+    )
+    locator_entity_info = {}  # locator_name -> (entity_type, tags)
+    if os.path.isfile(as_data_entity_path):
+        with open(as_data_entity_path, "r") as f:
+            for line in f:
+                line = line.strip()
+                if line.startswith("summon "):
+                    # Example: summon minecraft:pig ... {Tags:[...]}
+                    m = re.match(r"summon\s+([^\s]+)[^{]*\{.*Tags:\s*\[([^\]]+)\]", line)
+                    if not m:
+                        continue
+                    entity_type = m.group(1)
+                    tags_str = m.group(2)
+                    tags = [t.strip(" '\"") for t in tags_str.split(",") if t.strip(" '\"")]
+                    # Find locator tag: aj.<namespace>.locator.<locator_name>
+                    locator_tag_prefix = f"aj.{namespace}.locator."
+                    locator_name = None
+                    for tag in tags:
+                        if tag.startswith(locator_tag_prefix):
+                            locator_name = tag[len(locator_tag_prefix):]
+                            break
+                    if locator_name:
+                        locator_entity_info[locator_name] = (entity_type, tags)
 
-            # Add the relative path to the list of locator files
-            rel_path = os.path.relpath(locator_file, os.path.join(RIG_DIR, namespace)).replace("\\", "/")
-            locator_files.append(rel_path)
+    locator_files = []
+
+    # 3. Write locator files
+    for locator_name in sorted(locator_names):
+        locator_file = os.path.join(locators_dir, f"{locator_name}.txt")
+        with open(locator_file, "w") as lf:
+            lf.write(f"Locator Name: {locator_name}\n")
+            entity_type, tags = locator_entity_info.get(locator_name, ("", []))
+            lf.write(f"Entity: {entity_type}\n")
+            lf.write("Tags:\n")
+            for tag in tags:
+                if tag != "aj.new":
+                    lf.write(f"  - {tag}\n")
+        rel_path = os.path.relpath(locator_file, os.path.join(RIG_DIR, namespace)).replace("\\", "/")
+        locator_files.append(rel_path)
 
     return locator_files
 
