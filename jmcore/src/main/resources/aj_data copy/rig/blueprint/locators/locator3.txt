@@ -1,1 +1,3 @@
 Locator Name: locator3
+Entity: 
+Tags:

@@ -1,0 +1,22 @@
+Locator Name: locator2
+Entity: minecraft:item_display
+Tags:
+  - aj.blueprint.bone.center.child
+  - aj.blueprint.bone.center.child.locator
+  - aj.blueprint.bone.center.decendant
+  - aj.blueprint.bone.center.decendant.locator
+  - aj.blueprint.bone.center.tree
+  - aj.blueprint.entity
+  - aj.blueprint.locator
+  - aj.blueprint.locator.locator2
+  - aj.blueprint.node
+  - aj.blueprint.node.locator2
+  - aj.global.bone.center.child
+  - aj.global.bone.center.child.locator
+  - aj.global.bone.center.decendant
+  - aj.global.bone.center.decendant.locator
+  - aj.global.bone.center.tree
+  - aj.global.entity
+  - aj.global.locator
+  - aj.global.node
+  - aj.global.node.locator2

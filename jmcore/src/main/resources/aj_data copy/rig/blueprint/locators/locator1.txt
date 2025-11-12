@@ -1,0 +1,28 @@
+Locator Name: locator1
+Entity: minecraft:pig
+Tags:
+  - aj.blueprint.bone.center.decendant
+  - aj.blueprint.bone.center.decendant.locator
+  - aj.blueprint.bone.center.tree
+  - aj.blueprint.bone.locator1_group.child
+  - aj.blueprint.bone.locator1_group.child.locator
+  - aj.blueprint.bone.locator1_group.decendant
+  - aj.blueprint.bone.locator1_group.decendant.locator
+  - aj.blueprint.bone.locator1_group.tree
+  - aj.blueprint.entity
+  - aj.blueprint.locator
+  - aj.blueprint.locator.locator1
+  - aj.blueprint.node
+  - aj.blueprint.node.locator1
+  - aj.global.bone.center.decendant
+  - aj.global.bone.center.decendant.locator
+  - aj.global.bone.center.tree
+  - aj.global.bone.locator1_group.child
+  - aj.global.bone.locator1_group.child.locator
+  - aj.global.bone.locator1_group.decendant
+  - aj.global.bone.locator1_group.decendant.locator
+  - aj.global.bone.locator1_group.tree
+  - aj.global.entity
+  - aj.global.locator
+  - aj.global.node
+  - aj.global.node.locator1
