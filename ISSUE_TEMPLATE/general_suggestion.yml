@@ -1,0 +1,42 @@
+name: 💭 General Suggestion
+description: Share ideas, feedback, or improvements unrelated to specific features or bugs
+labels: ["suggestion", "needs triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Want to share feedback, ideas, or suggestions about MachCore projects or the organization in general?  
+        This is the right place!
+
+  - type: textarea
+    id: suggestion
+    attributes:
+      label: Suggestion
+      description: What would you like to suggest?
+      placeholder: Share your thoughts or ideas here.
+    validations:
+      required: true
+
+  - type: dropdown
+    id: category
+    attributes:
+      label: Category
+      description: What kind of suggestion is this?
+      options:
+        - Community or documentation improvement
+        - Workflow or contribution improvement
+        - Organization or repository structure
+        - Other
+
+  - type: textarea
+    id: reasoning
+    attributes:
+      label: Why is this valuable?
+      description: Explain how this suggestion would help contributors, maintainers, or users.
+      placeholder: Describe the reasoning behind your suggestion.
+
+  - type: textarea
+    id: additional
+    attributes:
+      label: Additional context
+      description: Any other notes, references, or examples.

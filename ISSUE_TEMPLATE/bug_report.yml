@@ -1,0 +1,71 @@
+name: 🐛 Bug Report
+description: Report something that isn't working as expected
+labels: ["bug", "needs triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to help improve MachCore projects!  
+        Please describe the issue clearly so it can be reproduced and fixed.
+
+  - type: input
+    id: project
+    attributes:
+      label: Affected project or repository
+      description: The name of the MachCore project this issue applies to (e.g. JMCore, Datapack Template, etc.)
+      placeholder: e.g. JMCore
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Describe the bug
+      description: What happened, and what did you expect to happen instead?
+      placeholder: A clear and concise description of the problem.
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      description: Provide a minimal set of steps to reproduce the issue.
+      placeholder: |
+        1. ...
+        2. ...
+        3. ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Relevant logs or screenshots
+      description: Include error messages, logs, or screenshots if possible.
+      render: shell
+
+  - type: dropdown
+    id: environment
+    attributes:
+      label: Environment details
+      description: Select all that apply.
+      multiple: true
+      options:
+        - Minecraft: Java Edition
+        - Paper Server
+        - Datapack
+        - Plugin
+        - Resource Pack
+        - Other
+
+  - type: input
+    id: version
+    attributes:
+      label: Version(s)
+      description: Minecraft, Paper, or plugin version (if applicable).
+      placeholder: e.g. Paper 1.21.4 build 87
+
+  - type: textarea
+    id: additional
+    attributes:
+      label: Additional context
+      description: Any other information that could help us understand or reproduce the issue.
