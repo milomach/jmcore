@@ -1,0 +1,54 @@
+name: 💡 Feature Request
+description: Suggest a new feature or improvement for a MachCore project
+labels: ["enhancement", "needs triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Got an idea to make MachCore projects better?  
+        Use this form to propose a feature or improvement.
+
+  - type: input
+    id: project
+    attributes:
+      label: Related project or repository
+      description: Which MachCore project should this feature belong to?
+      placeholder: e.g. JMCore
+
+  - type: textarea
+    id: summary
+    attributes:
+      label: Feature summary
+      description: What’s the feature, and what problem does it solve?
+      placeholder: A concise overview of your idea.
+    validations:
+      required: true
+
+  - type: textarea
+    id: details
+    attributes:
+      label: Detailed explanation
+      description: Describe how this feature would work, and any relevant examples or mockups.
+      placeholder: Explain how you imagine the feature functioning in detail.
+    validations:
+      required: true
+
+  - type: textarea
+    id: benefits
+    attributes:
+      label: Benefits and impact
+      description: Why should this feature be added? What would it improve?
+      placeholder: Describe how this helps users or developers.
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      description: Have you thought of other ways to solve this?
+      placeholder: List any alternatives or workarounds you've considered.
+
+  - type: textarea
+    id: additional
+    attributes:
+      label: Additional context
+      description: Any extra information, references, or related ideas.
