@@ -5,7 +5,7 @@ body:
   - type: markdown
     attributes:
       value: |
-        Want to share feedback, ideas, or suggestions about MachCore projects or the organization in general?  
+        Want to share feedback, ideas, or suggestions about the JMCore project or the repository in general?  
         This is the right place!
 
   - type: textarea
@@ -25,7 +25,7 @@ body:
       options:
         - Community or documentation improvement
         - Workflow or contribution improvement
-        - Organization or repository structure
+        - Project or repository structure
         - Other
 
   - type: textarea
