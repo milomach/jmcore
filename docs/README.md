@@ -1,7 +1,6 @@
-# MachCore Shared Documentation
+# JMCore Documentation
 
-Welcome to the MachCore organization documentation hub!  
-These documents apply to all MachCore projects.
+Welcome to the JMCore documentation hub!  
 
 ## 📄 Available Guides
 - [Contributor Workflow](./CONTRIBUTOR_WORKFLOW.md)
