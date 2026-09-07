@@ -1,92 +1,63 @@
-# ⚙️ What is JMCore?
+# JMCore
 
-- **JMCore** is a standalone utility framework plugin for Minecraft: Java Edition (Paper), designed to serve as a foundation for fully custom *game-like* development.
-- JMCore provides a **public runtime API**, accessible to other Paper plugins that declare it as a dependency.
-- JMCore is unopinionated, modular, and performant — handling the low-level complexity so you can focus on **creating**.
----
-## ✨ Key Features
+JMCore is a low-level API plugin for Minecraft: Java Edition (Paper), providing flexible building blocks for plugin developers to create their own fully custom systems intended to support game-like development without being constrained by opinionated, ready-made solutions.
 
-- 🎨 **UI / Screen Effects** — Build display-entity-based interfaces and custom interaction layers.
-- 🧱 **Models / Animations** — Drive dynamic entity visuals with a fully featured rig animation system.
-- 🎮 **Player Input** — Capture all forms of player input, including motion, look, inventory/hotbar actions, and more through unified input events.
-- 🌀 **Velocity System** — Control motion and physics with precise velocity management.
-- 🧍 **NPCs** — Create and manage pathfinding, targeting, and controlled AI behaviors.
-- 🧩 **Interactions** — Handle hitboxes, hurtboxes, and raycasting for custom collision logic.
----
-## 🧠 Philosophy
+## Purpose
 
-> **“Give developers the tools, not the limitations.”**
+JMCore is intended to serve as a foundation for other plugins rather than as a complete gameplay solution. It provides low-level functionality that developers can build upon while retaining control over how their own systems are designed and implemented.
 
-- JMCore provides *fundamental systems*, not prebuilt features, enabling you to design custom gameplay mechanics your own way.
-- It handles the complex, low-level workarounds required to go beyond Minecraft’s built-in systems, while leaving full creative control in your hands.
----
-## 👥 Who It's For
+JMCore does not aim to provide complete, user-facing systems. Instead, it focuses on providing the underlying capabilities needed to develop them.
 
-- **Plugin Developers** who want to build custom gameplay systems without constantly fighting Minecraft’s built-in limitations.
-- Projects that rely on **Paper’s plugin API** and want **deep engine-level functionality** without sacrificing modularity or control.
+## Intended Audience
 
-	JMCore is **not** a plugin for end users — it’s a **developer library** that other plugins can utilize.
----
-## ⚠️ Notes & Considerations
+JMCore is primarily intended for **plugin developers** building custom gameplay or game-like experiences on Paper.
 
-- JMCore’s systems often **override** or **replace** vanilla Minecraft mechanics.
-- Some components are only intended for **fully custom gameplay** environments.
-- While modular, certain systems have **necessary interdependencies** to function optimally.
+It is not intended to be a ready-to-use plugin for server owners or players. A typical use case is for another plugin to depend on JMCore and use its APIs as part of its own implementation.
 
-	Use JMCore as a **foundation**, not an add-on — it’s built for total creative control.
----
-## 🛠️ Development Status
+## Development Status
 
-- JMCore is in **active development** and is **not yet feature-stable**.
-- Expect ongoing refactors, optimizations, and API adjustments until the first stable release.
-- There is currently **no ETA** for a production version.
+JMCore is currently in **paused** development and is not yet considered stable.
 
-	Early adopters and contributors are welcome to experiment and provide feedback!
----
-## 🤝 Contributing
+The API and internal implementation may change as development continues. Documentation and examples will be added as the project develops.
 
-Contributions, ideas, and bug reports are always welcome! 
+There is currently no planned release date for a stable version.
 
-You can:
-- Open issues for bugs, ideas, or questions
-- Submit pull requests for fixes and improvements
-- Join community discussions once public links are available
+## Getting Started
 
-	Please see `CONTRIBUTING.md` for contribution guidelines (coming soon).
----
-## 📜 License
+### Requirements
 
-Licensed under the **AGPL-3.0** License.
-- JMCore is **free and open source**.
-- If you distribute a plugin that modifies or extends JMCore, it must also be **open-source under an AGPL-compatible license**.
-- This ensures that JMCore, and all of its derivatives, remain open and benefit the entire developer community.
+- Minecraft: Java Edition 1.21.10
+- Paper
+- Java 21 or later
 
-	Please see `LICENSE.md` for details.
----
-## 🌍 Links
+### Installation
 
-- 📦 **[GitHub Repository](https://github.com/milomach/jmcore)**
-- 💬 **[Discord](https://discord.gg/TdBhmS4suY)**
-- 🧭 **Documentation:** *(TODO)*
----
-## 🚀 Getting Started
+JMCore is installed as a server plugin and is intended to be used as a dependency by other Paper plugins.
 
-**Requirements**
-- Minecraft Java **1.21.10** (Paper)
-- Java **21+**
-- _(Additional dependencies TBD)_
+1. Place `JMCore.jar` in the server's `plugins` directory.
+2. Start or restart the server.
+3. Declare JMCore as a dependency of your plugin.
+4. Use the APIs provided by JMCore in your plugin.
 
-**Installation**
-1. Place `JMCore.jar` into your server’s `plugins` folder.
-2. Restart the server to generate the configuration and API hooks.
-3. Add `JMCore` as a dependency in your plugin’s `plugin.yml` or build configuration.
-4. Access JMCore’s API via the provided Java interfaces.
+API documentation and usage examples are currently a work in progress.
 
-	*(API documentation and code examples coming soon.)*
----
-## 🧾 Additional Files
+## Contributing
 
-- `ACKNOWLEDGEMENTS.md` – credits and third-party attributions
-- `TODO.md` – roadmap and ongoing tasks
-- `CONTRIBUTING.md` – contribution guidelines
-- `LICENSE.md` – AGPL-3.0 license terms
+JMCore is a personal project, but contributions, suggestions, and bug reports are welcome.
+
+- Open an issue for bugs, suggestions, or questions.
+- Submit a pull request for fixes or improvements.
+- See `CONTRIBUTING.md` for contribution guidelines.
+
+## License
+
+JMCore is licensed under the **AGPL-3.0** license.
+
+See `LICENSE.md` for the complete license terms.
+
+## Additional Files
+
+- `ACKNOWLEDGEMENTS.md` — third-party credits and attributions
+- `TODO.md` — ongoing tasks and development plans
+- `CONTRIBUTING.md` — contribution guidelines
+- `LICENSE.md` — license terms
