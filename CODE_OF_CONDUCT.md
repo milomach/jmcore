@@ -1,66 +1,41 @@
-# ⚙️ JMCore Code of Conduct
+# Code of Conduct
 
-Welcome to the JMCore project! 🎮   
-This Code of Conduct defines how to work together respectfully and productively across all **JMCore GitHub repositories**.
+JMCore is a personal open-source project, and contributions and discussion are welcome. This Code of Conduct exists to help keep project interactions respectful and constructive.
 
----
-## 💎 Our Standards
+## Expected Behavior
 
-JMCore thrives on creativity, collaboration, and mutual respect.  
-To maintain a welcoming and professional environment, all members are expected to:
+When participating in the project, please:
 
-### ✅ Positive Behavior
-- Be **respectful** and considerate in discussions, reviews, and feedback.  
-- Use **clear, constructive communication** — focus on solutions, not criticism.  
-- Encourage **learning and collaboration**; share knowledge freely.  
-- Acknowledge others’ efforts and contributions.  
-- Keep project discussions centered on goals, ideas, and improvements.  
+- Treat others with respect and consideration.
+- Keep discussions and feedback constructive and relevant to the project.
+- Discuss ideas and technical decisions in good faith.
+- Avoid personal attacks, harassment, discrimination, and other hostile behavior.
+- Respect others' privacy and do not share private or sensitive information without permission.
 
-### 🚫 Unacceptable Behavior
-- Disrespectful, hostile, or aggressive comments.  
-- Personal attacks, harassment, or discrimination of any kind.  
-- Dismissive or exclusionary language toward other contributors.  
-- Spamming, trolling, or derailing discussions.  
+## Unacceptable Behavior
+
+The following behavior is not acceptable:
+
+- Harassment, discrimination, threats, or personal attacks.
+- Deliberately hostile or abusive behavior.
+- Trolling, spam, or intentionally disruptive participation.
 - Sharing private or sensitive information without consent.
+- Any other behavior that prevents others from participating in project discussions or contributions in good faith.
 
----
-## ⚖️ Scope
+## Scope
 
-This Code of Conduct applies to **all interactions within JMCore GitHub repositories**, including:
-- Issues, pull requests, and discussions  
-- Comments and reviews  
-- Public and private communication related to the projects  
+This Code of Conduct applies to interactions related to JMCore, including issues, pull requests, discussions, code reviews, and other project-related communication.
 
-Behavior that occurs outside of GitHub but affects collaboration or community trust may also be addressed.
+## Enforcement
 
----
-## ⚙️ Enforcement
+The JMCore maintainer may take whatever action is considered appropriate in response to violations of this Code of Conduct. This may include removing content, restricting participation, or declining contributions.
 
-Violations of this Code of Conduct may result in actions taken by the JMCore maintainer(s), including:
+## Reporting
 
-- A **verbal or written warning** explaining the violation.  
-- **Revocation of repository permissions** (e.g., removal from collaborator or team roles).  
-- **Temporary or permanent blocking** from contributing to specific repositories.  
-- **Organization-level removal or banning**, preventing further participation across JMCore projects.  
-- **Escalation to GitHub Trust & Safety** for severe or repeated violations.
+If you encounter behavior that violates this Code of Conduct, you may contact the JMCore maintainer privately with relevant details or context.
 
-All actions will be taken at the discretion of the JMCore maintainer(s), with fairness and respect for confidentiality.
+Reports will be considered on a case-by-case basis.
 
----
-## 🚨 Reporting Issues
+## Attribution
 
-If you encounter behavior that violates this Code of Conduct:
-1. Report it privately to the JMCore maintainer(s) via a GitHub issue (if appropriate) or through direct contact.  
-2. Provide relevant details (links, context, or evidence).  
-3. Reports will be handled promptly, professionally, and confidentially.
-
----
-## 🧭 Attribution
-
-This Code of Conduct is adapted from the [Contributor Covenant](https://www.contributor-covenant.org/), version 2.1, with modifications for the JMCore project and GitHub community.
-
----
-## ❤️ Our Commitment
-
-JMCore is built on open collaboration and shared innovation.  
-By participating, you help create a community where developers can experiment, learn, and build — shaping the next generation of **vanilla-compatible Minecraft experiences** together.
+This Code of Conduct is adapted from the [Contributor Covenant](https://www.contributor-covenant.org/), version 2.1.
