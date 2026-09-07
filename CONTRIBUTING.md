@@ -1,65 +1,63 @@
-# 🤝 Contributing to JMCore
+# Contributing to JMCore
 
-Thank you for your interest in contributing!  
-Whether you’re fixing a bug, improving documentation, or adding new functionality — your efforts help improve the JMCore project.
+JMCore is a personal open-source project, and contributions are welcome. This document outlines the preferred ways to contribute and the development workflow used by the project.
 
----
-## 🧩 Ways to Contribute
+## Ways to Contribute
 
-You can participate in development by:
+There are several ways to contribute to JMCore:
 
-- **Reporting bugs** — open a GitHub Issue with clear reproduction steps and expected behavior.  
-- **Suggesting features or improvements** — propose ideas through GitHub Issues using the appropriate label (e.g. `enhancement`).  
-- **Submitting code changes** — follow our branching model and open a pull request once your changes are ready.  
-- **Improving documentation** — clarify, expand, or update guides and READMEs.  
+- **Report bugs** — Open a GitHub issue with clear reproduction steps, expected behavior, and relevant details.
+- **Suggest features or improvements** — Use GitHub Issues to propose ideas or changes. Use the appropriate issue label, such as `enhancement`, where applicable.
+- **Submit code changes** — Follow the project's branching and contribution workflow when submitting changes through a pull request.
+- **Improve documentation** — Help clarify, expand, or update documentation and other project files.
 
-If you’re unsure whether your idea fits the scope of JMCore, open an issue first to discuss it before writing code.
+If you are unsure whether a proposed change fits the scope or direction of JMCore, consider opening an issue to discuss it before beginning implementation.
 
----
-## 🧱 Development Guidelines
+## Development Guidelines
 
-Our top priority is **clarity** — for both humans and systems.
+Contributions should prioritize clarity, maintainability, and consistency.
 
-- Use **clear, descriptive names** for files, classes, methods, and variables.  
-- Write **detailed comments** explaining intent, logic, and reasoning — especially for complex systems, algorithms, or math-heavy areas.  
-- Keep **commits focused and descriptive**, addressing one clear change at a time.  
-- Maintain **readability and consistency** throughout your contributions.  
-- Ensure your code or documentation **functions correctly and is tested** before submission.  
+- Use clear and descriptive names for files, classes, methods, and variables.
+- Document the intent and reasoning behind complex or non-obvious code, particularly algorithms, mathematical logic, and workarounds.
+- Keep commits focused and descriptive, with each commit representing a coherent change.
+- Follow the existing code style and patterns used throughout the project.
+- Test changes before submitting them and ensure that contributed code and documentation work as expected.
 
----
-## 🌿 Workflow Overview
+## Workflow
 
-JMCore follows a unified **Git branching model** to ensure consistent and traceable collaboration.
+JMCore uses a Git branching workflow to organize development and review changes.
 
-- **Contributors (default permissions):**  
-  Fork the repository, create a feature branch, make your changes, push to your fork, and open a pull request targeting the `develop` branch.  
+### Contributors
 
-- **Developers (write permissions):**  
-  Work directly within the main repository, create and push feature branches, and open pull requests for review when merging to `develop` or `main`.  
+Contributors without write access should:
 
-For detailed steps, refer to the [Contributor Workflow Guide](./docs/CONTRIBUTOR_WORKFLOW.md).
+1. Fork the repository.
+2. Create a feature branch from the appropriate branch.
+3. Make and test their changes.
+4. Push the branch to their fork.
+5. Open a pull request targeting the `develop` branch.
 
----
-## ⚖️ License
+### Developers
 
-By contributing to the JMCore project, you agree that your submissions will be made available under the license of the project.  
-See the repository’s root `LICENSE` file for details.
+Developers with write access may work directly in the main repository. Changes should be made on feature branches and submitted through pull requests when merging into `develop` or `main`.
 
----
-## 💬 Communication
+For the complete workflow and additional details, see the Contributor Workflow Guide.
 
-- 🧠 **Bugs, ideas, or suggestions:**  
-  Use **GitHub Issues** for all formal contributions and feedback.
+## License
 
-- 💬 **Help and discussion:**  
-  Join the JMCore Discord to ask questions, get help, or chat about development:  
-  [Discord](https://discord.gg/TdBhmS4suY)
+By contributing to JMCore, you agree that your contributions will be made available under the project's license.
+
+See `LICENSE.md` for the applicable license terms.
+
+## Communication
+
+GitHub Issues are the primary method for reporting bugs, suggesting changes, and providing other project-related feedback.
+
+For general questions or development discussion, you can also use the JMCore Discord.
 
 When opening an issue:
-- Use the most appropriate issue template (if available).  
-- Provide clear, complete, and concise information.  
-- Link related issues or pull requests where relevant.  
 
----
-
-Thank you for contributing to the JMCore project — your work helps shape a better foundation for custom Minecraft development.
+- Use the appropriate issue template, when available.
+- Provide clear and relevant information.
+- Include reproduction steps or other supporting details when applicable.
+- Link related issues or pull requests where relevant.
