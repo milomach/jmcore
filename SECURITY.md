@@ -1,51 +1,35 @@
-# 🔐 Security Policy
+# Security
 
-Security and stability are a top priority for the **JMCore** project.
+JMCore is a plugin development library, and most bugs or unexpected behavior are not security issues. However, some issues may allow unintended access, behavior, or interaction that could be exploited by a player, plugin, or other party.
 
-This document explains how to responsibly report vulnerabilities and how security updates are handled.
+This document explains how to report issues that may have security implications.
 
----
-## 🧭 Supported Versions
+## Reporting a Security Issue
 
-Only the most recent **stable release** of the project is actively supported and receives security updates.
+If you believe an issue could be exploited, **do not report it through a public GitHub issue or pull request**. Report it privately so that the issue can be investigated before details are made public.
 
-Older or archived versions may not be patched.
+The preferred method is GitHub's **Report a vulnerability** feature. Alternatively, you may contact the maintainer privately using the email address listed in the repository's GitHub profile.
 
----
-## 🛠️ Reporting a Vulnerability
+When possible, include:
 
-If you discover a potential security issue:
+- A description of the issue and its potential impact.
+- Steps or conditions required to reproduce it.
+- The affected JMCore version.
+- Relevant Minecraft, Paper, Java, or dependency versions.
+- Any other information that may help reproduce or understand the issue.
 
-1. **Do not open a public issue or pull request.**
+If you are unsure whether an issue qualifies as a security issue, it is preferable to report it privately.
 
-Security vulnerabilities should be reported privately.
+## Handling Reports
 
-2. **Contact the maintainer(s) privately** through one of the following:
-	- Via GitHub’s *“Report a vulnerability”* feature (recommended).
-	- Or email `milomach808@gmail.com`.
+Security reports will be reviewed on a case-by-case basis. If an issue is confirmed to have security implications, it will be addressed as appropriate and, where necessary, a fix will be released.
 
-3. Include the following details:
-	- A clear description of the issue and its potential impact.
-	- Steps to reproduce the problem (if possible).
-	- Any relevant environment or version details.
+Once an issue has been resolved, relevant information may be added to the project's release notes or other documentation.
 
-We will acknowledge your report within **5 business days** and provide regular updates until the issue is resolved.
+Contributors may be credited for reported issues if they wish.
 
----
-## 🧩 Handling and Disclosure Process
+## Supported Versions
 
-1. The JMCore maintainer(s) will review the report and verify the vulnerability.
-2. If confirmed, the issue will be patched privately.
-3. Once resolved, an update will be released and noted in the project’s changelog.
-4. Credit may be given to the reporter (if desired).
+JMCore is currently under **paused** development and does not yet have a stable release.
 
----
-## 🚧 Security Best Practices
-
-- Always use the latest release of JMCore.
-- Avoid using untrusted or modified versions.
-- Keep dependencies up to date.
-
----
-
-Thank you for helping keep the JMCore project secure and reliable for everyone.
+Until a stable release is available, security fixes may be made to the current development version rather than older versions.
